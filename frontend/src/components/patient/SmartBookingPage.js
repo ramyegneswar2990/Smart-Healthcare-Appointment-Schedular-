@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../../utils/api';
 
 const SmartBookingPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const initialDoctorId = new URLSearchParams(location.search).get('doctorId') || '';
 
     const [step, setStep] = useState(1); // 1: Condition, 2: AI Recommendations, 3: Confirm
     const [formData, setFormData] = useState({

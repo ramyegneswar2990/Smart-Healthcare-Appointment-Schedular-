@@ -26,7 +26,7 @@ const BellIcon = () => (
 );
 
 const PatientDashboard = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -89,6 +89,7 @@ const PatientDashboard = () => {
           <div className="user-brief" style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
             <img
               src={user?.profileImage || `https://ui-avatars.com/api/?name=${user?.name || 'Patient'}&background=3182CE&color=fff`}
+              alt="User"
               style={{ width: '36px', height: '36px', borderRadius: '50%' }}
             />
             <div style={{ overflow: 'hidden' }}>

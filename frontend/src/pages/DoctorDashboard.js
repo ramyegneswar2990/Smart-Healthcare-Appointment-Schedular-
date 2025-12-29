@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Routes, Route, NavLink, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import AppointmentList from '../components/doctor/AppointmentList';
 import DoctorHome from '../components/doctor/DoctorHome';
@@ -11,12 +11,11 @@ import DoctorReportManager from '../components/doctor/DoctorReportManager';
 import './DoctorLayout.css';
 
 // Placeholder icons
+// Placeholder icons
 const HomeIcon = () => <span>🏠</span>;
 const CalendarIcon = () => <span>📅</span>;
-const ClipboardListIcon = () => <span>📋</span>;
 const CreditCardIcon = () => <span>💳</span>;
 const UserIcon = () => <span>👤</span>;
-const CogIcon = () => <span>⚙️</span>;
 const LogoutIcon = () => <span>🚪</span>;
 const ReportIcon = () => <span>📋</span>;
 const SearchIcon = () => (

@@ -6,7 +6,7 @@ const AppointmentList = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchAppointments = async () => {
+  const fetchAppointments = React.useCallback(async () => {
     try {
       const response = await api.get('/api/appointments');
       setAppointments(response.data.data);
@@ -15,11 +15,12 @@ const AppointmentList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchAppointments();
-  }, []);
+  }, [fetchAppointments]);
+
 
   const handleCancel = async (id) => {
     if (window.confirm('Are you sure you want to cancel this appointment?')) {
@@ -65,7 +66,7 @@ const AppointmentList = () => {
                 <tr key={app._id} style={{ borderTop: '1px solid #EDF2F7' }}>
                   <td style={{ padding: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <img src={app.doctor?.profileImage || "https://ui-avatars.com/api/?name=Doctor&background=E2E8F0"} style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
+                      <img src={app.doctor?.profileImage || "https://ui-avatars.com/api/?name=Doctor&background=E2E8F0"} alt="Doctor" style={{ width: '32px', height: '32px', borderRadius: '50%' }} />
                       <span style={{ fontWeight: '500' }}>Dr. {app.doctor?.name}</span>
                     </div>
                   </td>
