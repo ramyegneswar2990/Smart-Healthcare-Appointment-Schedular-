@@ -38,8 +38,8 @@ const PatientHome = () => {
                 setUser(userRes.data.data);
 
                 const s = statsRes.data.data;
-                setStats({
-                    ...stats,
+                setStats(prev => ({
+                    ...prev,
                     nextAppointment: s.nextAppointment ?
                         `${new Date(s.nextAppointment.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} ${s.nextAppointment.time}` :
                         'Not scheduled',
@@ -47,7 +47,7 @@ const PatientHome = () => {
                     appointmentsCount: s.appointmentsCount,
                     prescriptionsCount: s.prescriptionsCount,
                     recentActivity: s.recentActivity
-                });
+                }));
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
             } finally {

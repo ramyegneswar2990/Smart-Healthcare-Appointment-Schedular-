@@ -5,7 +5,6 @@ import './DoctorHome.css';
 // Placeholder icons
 const UserGroupIcon = () => <span>👥</span>;
 const CalendarIcon = () => <span>📅</span>;
-const ClockIcon = () => <span>⏰</span>;
 const ChatIcon = () => <span>💬</span>;
 const DocumentTextIcon = () => <span>📄</span>;
 const PhoneIcon = () => <span>📞</span>;
@@ -21,7 +20,7 @@ const DoctorHome = ({ searchTerm = '' }) => {
         requests: []
     });
     const [loading, setLoading] = useState(true);
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const [currentDate] = useState(new Date());
 
     const fetchStats = async () => {
         try {

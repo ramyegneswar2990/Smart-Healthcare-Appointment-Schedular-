@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../../utils/api';
-
 const SmartBookingPage = () => {
     const navigate = useNavigate();
-    const location = useLocation();
 
     const [step, setStep] = useState(1); // 1: Condition, 2: AI Recommendations, 3: Confirm
     const [formData, setFormData] = useState({
@@ -72,7 +70,7 @@ const SmartBookingPage = () => {
                 doctor: selectedSlot.doctor._id,
                 appointmentDate: selectedSlot.date,
                 appointmentTime: selectedSlot.time,
-                reason: `${formData.condition} - ${formData.symptoms}`
+                reason: `${formData.condition} - ${formData.symptoms} `
             });
 
             alert('✅ Appointment booked successfully!');
@@ -218,7 +216,7 @@ const SmartBookingPage = () => {
                                                 alt={rec.doctor.name}
                                                 style={{ width: '100px', height: '100px', borderRadius: '16px', objectFit: 'cover' }}
                                             />
-                                            <div style={{ flex: 1 }}>
+                                            < div style={{ flex: 1 }}>
                                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
                                                     <h4 style={{ margin: 0, fontSize: '20px', fontWeight: '800', color: '#1A365D' }}>Dr. {rec.doctor.name}</h4>
                                                     <span style={{ padding: '4px 10px', background: '#3182CE', color: 'white', fontSize: '11px', fontWeight: '700', borderRadius: '6px' }}>AI Score: {rec.aiScore}</span>
@@ -226,8 +224,8 @@ const SmartBookingPage = () => {
                                                 <p style={{ margin: '0 0 8px 0', color: '#4A5568', fontSize: '15px', fontWeight: '600' }}>{rec.doctor.specialization}</p>
                                                 <p style={{ margin: 0, color: '#718096', fontSize: '13px' }}>⭐ {rec.doctor.rating}/5 • {rec.doctor.experienceYears}+ years experience</p>
                                                 <p style={{ margin: '8px 0 0 0', color: '#3182CE', fontSize: '13px', fontWeight: '600' }}>{rec.reasonForRecommendation}</p>
-                                            </div>
-                                        </div>
+                                            </div >
+                                        </div >
 
                                         <div>
                                             <h5 style={{ margin: '0 0 12px 0', fontSize: '14px', fontWeight: '700', color: '#2D3748' }}>🕒 Available Time Slots</h5>
@@ -255,62 +253,66 @@ const SmartBookingPage = () => {
                                                 ))}
                                             </div>
                                         </div>
-                                    </div>
+                                    </div >
                                 ))}
-                            </div>
-                        </div>
+                            </div >
+                        </div >
                     )}
 
                     {/* Alternative Recommendations */}
-                    {aiRecommendations.alternativeRecommendations && aiRecommendations.alternativeRecommendations.length > 0 && (
-                        <div>
-                            <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#718096', marginBottom: '16px' }}>🔄 Alternative Options</h3>
-                            <div style={{ display: 'grid', gap: '12px' }}>
-                                {aiRecommendations.alternativeRecommendations.map(alt => (
-                                    <div key={alt.doctor._id} style={{ padding: '16px', border: '1px solid #E2E8F0', borderRadius: '12px', background: '#F7FAFC' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <div>
-                                                <strong>Dr. {alt.doctor.name}</strong> - {alt.doctor.specialization}
+                    {
+                        aiRecommendations.alternativeRecommendations && aiRecommendations.alternativeRecommendations.length > 0 && (
+                            <div>
+                                <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#718096', marginBottom: '16px' }}>🔄 Alternative Options</h3>
+                                <div style={{ display: 'grid', gap: '12px' }}>
+                                    {aiRecommendations.alternativeRecommendations.map(alt => (
+                                        <div key={alt.doctor._id} style={{ padding: '16px', border: '1px solid #E2E8F0', borderRadius: '12px', background: '#F7FAFC' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <div>
+                                                    <strong>Dr. {alt.doctor.name}</strong> - {alt.doctor.specialization}
+                                                </div>
+                                                <span style={{ fontSize: '12px', color: '#718096' }}>{alt.message}</span>
                                             </div>
-                                            <span style={{ fontSize: '12px', color: '#718096' }}>{alt.message}</span>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {selectedSlot && (
-                        <div style={{ marginTop: '32px', padding: '20px', background: '#EBF8FF', borderRadius: '16px', border: '2px solid #3182CE' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div>
-                                    <h4 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '700', color: '#1A365D' }}>✅ Selected Appointment</h4>
-                                    <p style={{ margin: 0, fontSize: '15px', color: '#2D3748' }}>
-                                        <strong>Dr. {selectedSlot.doctor.name}</strong> on <strong>{selectedSlot.dayName}, {selectedSlot.date}</strong> at <strong>{selectedSlot.time}</strong>
-                                    </p>
+                                    ))}
                                 </div>
-                                <button
-                                    onClick={confirmBooking}
-                                    disabled={booking}
-                                    style={{
-                                        padding: '14px 32px',
-                                        borderRadius: '12px',
-                                        background: '#3182CE',
-                                        color: 'white',
-                                        border: 'none',
-                                        fontSize: '16px',
-                                        fontWeight: '700',
-                                        cursor: 'pointer',
-                                        boxShadow: '0 4px 12px rgba(49, 130, 206, 0.3)'
-                                    }}
-                                >
-                                    {booking ? 'Booking...' : 'Confirm Booking'}
-                                </button>
                             </div>
-                        </div>
-                    )}
-                </div>
-            </div>
+                        )
+                    }
+
+                    {
+                        selectedSlot && (
+                            <div style={{ marginTop: '32px', padding: '20px', background: '#EBF8FF', borderRadius: '16px', border: '2px solid #3182CE' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div>
+                                        <h4 style={{ margin: '0 0 8px 0', fontSize: '18px', fontWeight: '700', color: '#1A365D' }}>✅ Selected Appointment</h4>
+                                        <p style={{ margin: 0, fontSize: '15px', color: '#2D3748' }}>
+                                            <strong>Dr. {selectedSlot.doctor.name}</strong> on <strong>{selectedSlot.dayName}, {selectedSlot.date}</strong> at <strong>{selectedSlot.time}</strong>
+                                        </p>
+                                    </div>
+                                    <button
+                                        onClick={confirmBooking}
+                                        disabled={booking}
+                                        style={{
+                                            padding: '14px 32px',
+                                            borderRadius: '12px',
+                                            background: '#3182CE',
+                                            color: 'white',
+                                            border: 'none',
+                                            fontSize: '16px',
+                                            fontWeight: '700',
+                                            cursor: 'pointer',
+                                            boxShadow: '0 4px 12px rgba(49, 130, 206, 0.3)'
+                                        }}
+                                    >
+                                        {booking ? 'Booking...' : 'Confirm Booking'}
+                                    </button>
+                                </div>
+                            </div>
+                        )
+                    }
+                </div >
+            </div >
         );
     }
 
