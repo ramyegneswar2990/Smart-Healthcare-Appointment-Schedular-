@@ -41,20 +41,36 @@ app.use((err, req, res, next) => {
 });
 
 // Database connection
-mongoose
-  .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/healthcare-appointments')
-  .then(() => {
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/healthcare-appointments');
     console.log('MongoDB connected successfully');
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
+  } catch (error) {
     console.error('MongoDB connection error details:');
     console.error(JSON.stringify(error, null, 2));
     process.exit(1);
+  }
+};
+
+// Start server only if not in production/imported
+if (process.env.NODE_ENV !== 'test') { // Standard check for server start
+  connectDB().then(() => {
+    // Only listen if the file is the main entry point
+    if (require.main === module) {
+      const PORT = process.env.PORT || 5000;
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    }
   });
+}
+
+// For Vercel/serverless environments, we export the app
+// The connection should be established outside the listen block
+if (process.env.NODE_ENV === 'production') {
+  connectDB();
+}
 
 module.exports = app;
+
 
