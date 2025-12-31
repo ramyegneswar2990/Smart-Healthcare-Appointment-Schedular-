@@ -32,11 +32,14 @@ app.use((req, res) => {
 });
 
 // Error handler
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(err.status || 500).json({
     message: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    // TEMPORARY DEBUG: Show stack trace in production to identify 500 cause
+    stack: err.stack,
+    error: err
   });
 });
 
