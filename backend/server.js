@@ -41,35 +41,53 @@ app.use((err, req, res, next) => {
 });
 
 // Database connection
+// Database connection
+let isConnected = false;
+
 const connectDB = async () => {
+  if (isConnected) {
+    console.log('Using existing MongoDB connection');
+    return;
+  }
+
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/healthcare-appointments');
+    const db = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/healthcare-appointments', {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+    });
+
+    isConnected = db.connections[0].readyState;
     console.log('MongoDB connected successfully');
   } catch (error) {
-    console.error('MongoDB connection error details:');
-    console.error(JSON.stringify(error, null, 2));
-    process.exit(1);
+    console.error('MongoDB connection error:', error);
+    // Do not exit process in production/serverless environment
+    if (process.env.NODE_ENV !== 'production') {
+      process.exit(1);
+    }
+    throw error;
   }
 };
 
 // Start server only if not in production/imported
-if (process.env.NODE_ENV !== 'test') { // Standard check for server start
-  connectDB().then(() => {
-    // Only listen if the file is the main entry point
-    if (require.main === module) {
+if (process.env.NODE_ENV !== 'test') {
+  // Only listen if the file is the main entry point
+  if (require.main === module) {
+    connectDB().then(() => {
       const PORT = process.env.PORT || 5000;
       app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
       });
-    }
-  });
+    });
+  }
 }
 
-// For Vercel/serverless environments, we export the app
-// The connection should be established outside the listen block
+// For Vercel/serverless environments
 if (process.env.NODE_ENV === 'production') {
   connectDB();
 }
+
 
 module.exports = app;
 
